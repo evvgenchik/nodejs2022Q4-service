@@ -1,11 +1,11 @@
-interface BaseData {
-  id: string;
-}
+// interface BaseData {
+//   id: string;
+// }
 
-interface DataBase<T extends BaseData> {
-  set(value: T): void;
-  get(id: number): T | undefined;
-}
+// interface DataBase<T extends BaseData> {
+//   set(value: T): void;
+//   get(id: number): T | undefined;
+// }
 
 interface User {
   id: string; // uuid v4
@@ -16,4 +16,4 @@ interface User {
   updatedAt: number; // timestamp of last update
 }
 
-export { BaseData, DataBase, User };
+export { User };

@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
 export class UserDb {
@@ -5,9 +6,11 @@ export class UserDb {
 
   create(value) {
     const id = uuidv4();
+    const date = new Date();
     value['id'] = id;
     value['version'] = 0;
-    value['createdAt'] = new Date();
+    value['createdAt'] = date;
+    value['updatedAt'] = date;
     this.db[id] = value;
     return this.db[id];
   }
@@ -17,14 +20,18 @@ export class UserDb {
   }
 
   get(id: string) {
-    return this.db[id];
+    const user = this.db[id];
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 
   update(id: string, newUser) {
     this.db[id] = newUser;
     const user = this.db[id];
     user['version'] = ++user.version;
-    user[' updatedAt'] = new Date();
+    user['updatedAt'] = new Date();
     return user;
   }
 

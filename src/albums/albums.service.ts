@@ -21,5 +21,6 @@ export class AlbumsService {
   }
   async delete(id: string) {
     DbService.albums.delete(id);
+    DbService.tracks.updateAlbums(id);
   }
 }

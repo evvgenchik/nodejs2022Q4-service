@@ -2,7 +2,6 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { AlbumEntity } from './albumEntety';
 import { AlbumDto } from 'src/albums/dto/albumDto';
-import { DbService } from '../db.service';
 
 export class AlbumsDb {
   private db = [];
@@ -48,13 +47,6 @@ export class AlbumsDb {
     if (albumIndex === -1) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
-
-    const traks = DbService.tracks.getAll();
-    const tracksThisAlbum = traks.filter((el) => el.albumId === id);
-    tracksThisAlbum.forEach((track) => {
-      track.albumId = null;
-      DbService.tracks.update(track.id, track);
-    });
 
     this.db.splice(albumIndex, 1);
   }

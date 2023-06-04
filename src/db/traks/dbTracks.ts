@@ -50,10 +50,10 @@ export class TracksDb {
     this.db.splice(trackIndex, 1);
   }
 
-  updateAlbums(id: string) {
-    const tracksThisAlbum = this.db.filter((el) => el.albumId === id);
+  updateScpecific(id: string, key: keyof TrackEntity) {
+    const tracksThisAlbum = this.db.filter((el) => el[key] === id);
     tracksThisAlbum.forEach((track) => {
-      track.albumId = null;
+      track[key] = null;
       this.update(track.id, track);
     });
   }

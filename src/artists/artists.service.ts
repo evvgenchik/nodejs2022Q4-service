@@ -21,5 +21,7 @@ export class ArtistsService {
   }
   async delete(id: string) {
     DbService.artists.delete(id);
+    DbService.tracks.updateScpecific(id, 'artistId');
+    DbService.albums.updateScpecific(id, 'artistId');
   }
 }

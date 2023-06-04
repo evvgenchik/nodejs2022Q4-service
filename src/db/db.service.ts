@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UserDb } from './users/dbUsers';
+import { UsersDb } from './users/dbUsers';
+import { ArtistsDb } from './artists/dbArtists';
 
 @Injectable()
 export class DbService {
-  static users = new UserDb();
+  static users = new UsersDb();
+  static artists = new ArtistsDb();
 }

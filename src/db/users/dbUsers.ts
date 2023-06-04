@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserEntity } from './userEntety';
 import { CreateUserDto } from 'src/users/dto/createUserDto';
 
-export class UserDb {
+export class UsersDb {
   private db = [];
 
   create(dto: CreateUserDto) {

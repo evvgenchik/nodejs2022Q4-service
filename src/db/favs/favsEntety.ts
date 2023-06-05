@@ -12,8 +12,4 @@ export class FavEntity {
     this.albums = [];
     this.tracks = [];
   }
-
-  //  constructor(partial: Partial<ArtistEntity>) {
-  //   Object.assign(this, partial);
-  // }
 }

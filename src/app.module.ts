@@ -9,7 +9,7 @@ import { FavsModule } from './favs/favs.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: '.development.env' }),
+    ConfigModule.forRoot(),
     UsersModule,
     DbModule,
     ArtistsModule,

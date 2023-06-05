@@ -28,16 +28,16 @@ export class AlbumsDb {
     return album;
   }
 
-  update(id: string, newArtist) {
+  update(id: string, newAlbum) {
     const album = this.db.find((el) => el.id === id);
 
     if (!album) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    album.name = newArtist.name;
-    album.artistId = newArtist.artistId;
-    album.year = newArtist.year;
+    album.name = newAlbum.name;
+    album.artistId = newAlbum.artistId;
+    album.year = newAlbum.year;
     return album;
   }
 

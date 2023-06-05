@@ -9,8 +9,8 @@ export class FavsService {
     return DbService.favs.getAll();
   }
 
-  async add<T>(obj: T, dbKey: string) {
-    const data = DbService.favs.add<T>(obj, dbKey);
+  async add(id: string, dbKey: string) {
+    const data = DbService.favs.add(id, dbKey);
     return data;
   }
 

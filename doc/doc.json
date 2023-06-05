@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "/api"
+      "url": "/"
     }
   ],
   "components": {
@@ -151,103 +151,7 @@
     }
   ],
   "paths": {
-    "/login": {
-      "post": {
-        "tags": ["Login"],
-        "security": [],
-        "summary": "Login",
-        "description": "Logins a user and returns a JWT-token",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "title": "example",
-                "properties": {
-                  "login": {
-                    "type": "string",
-                    "description": "Username"
-                  },
-                  "password": {
-                    "type": "string",
-                    "description": "Password"
-                  }
-                },
-                "required": ["user", "login"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful login.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": {
-                      "type": "string"
-                    }
-                  },
-                  "description": "JWT Token"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Incorrect login or password"
-          }
-        }
-      }
-    },
-    "/signup": {
-      "post": {
-        "tags": ["Signup"],
-        "security": [],
-        "summary": "Signup",
-        "description": "Signup a user",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "title": "example",
-                "properties": {
-                  "login": {
-                    "type": "string",
-                    "minLength": 3,
-                    "maxLength": 255,
-                    "description": "Username"
-                  },
-                  "password": {
-                    "type": "string",
-                    "format": "password",
-                    "pattern": "^[a-zA-Z0-9]{3,30}",
-                    "description": "Password"
-                  }
-                },
-                "required": ["login", "password"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Successful signup"
-          },
-          "400": {
-            "description": "Bad request"
-          },
-          "409": {
-            "description": "Conflict. Login already exists"
-          }
-        }
-      }
-    },
-    "/users": {
+    "/user": {
       "get": {
         "tags": ["Users"],
         "summary": "Get all users",
@@ -265,9 +169,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -310,14 +211,11 @@
           },
           "400": {
             "description": "Bad request. body does not contain required fields"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
     },
-    "/users/{userId}": {
+    "/user/{userId}": {
       "parameters": [
         {
           "name": "userId",
@@ -344,10 +242,7 @@
             }
           },
           "400": {
-            "description": "Bad request. userId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "User not found"
@@ -415,10 +310,7 @@
             }
           },
           "400": {
-            "description": "Bad request. userId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "403": {
             "description": "oldPassowrd is wrong"
@@ -439,16 +331,13 @@
           "400": {
             "description": "Bad request. userId is invalid (not uuid)"
           },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
-          },
           "404": {
             "description": "User not found"
           }
         }
       }
     },
-    "/tracks": {
+    "/track": {
       "get": {
         "tags": ["Track"],
         "summary": "Get tracks list",
@@ -466,9 +355,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -516,15 +402,12 @@
             }
           },
           "400": {
-            "description": "Bad request. body does not contain required fields"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request."
           }
         }
       }
     },
-    "/tracks/{id}": {
+    "/track/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -552,10 +435,7 @@
             }
           },
           "400": {
-            "description": "Bad request. trackId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Track was not found."
@@ -637,10 +517,7 @@
             }
           },
           "400": {
-            "description": "Bad request. trackId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Track was not found."
@@ -656,10 +533,7 @@
             "description": "Delelted succesfully"
           },
           "400": {
-            "description": "Bad request. trackId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Track was not found."
@@ -667,7 +541,7 @@
         }
       }
     },
-    "/albums": {
+    "/album": {
       "get": {
         "tags": ["Album"],
         "summary": "Get albums list",
@@ -685,9 +559,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -732,15 +603,12 @@
             }
           },
           "400": {
-            "description": "Bad request. body does not contain required fields"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request."
           }
         }
       }
     },
-    "/albums/{id}": {
+    "/album/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -768,10 +636,7 @@
             }
           },
           "400": {
-            "description": "Bad request. albumId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Album was not found."
@@ -819,10 +684,7 @@
             }
           },
           "400": {
-            "description": "Bad request. albumId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Album was not found."
@@ -838,10 +700,7 @@
             "description": "Deleted succesfully"
           },
           "400": {
-            "description": "Bad request. albumId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Album was not found."
@@ -849,7 +708,7 @@
         }
       }
     },
-    "/artists": {
+    "/artist": {
       "get": {
         "tags": ["Artist"],
         "summary": "Get all artists",
@@ -867,9 +726,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       },
@@ -908,15 +764,12 @@
             }
           },
           "400": {
-            "description": "Bad request. body does not contain required fields"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request."
           }
         }
       }
     },
-    "/artists/{id}": {
+    "/artist/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -944,10 +797,7 @@
             }
           },
           "400": {
-            "description": "Bad request. artistId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Artist was not found."
@@ -989,10 +839,7 @@
             }
           },
           "400": {
-            "description": "Bad request. artistId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Artist was not found."
@@ -1008,10 +855,7 @@
             "description": "Delelted succesfully"
           },
           "400": {
-            "description": "Bad request. artistId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Artist was not found."
@@ -1034,9 +878,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           }
         }
       }
@@ -1062,13 +903,10 @@
             "description": "Added succesfully"
           },
           "400": {
-            "description": "Bad. trackId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad Request. Validation failed (uuid  is expected)"
           },
           "422": {
-            "description": "Track with id doesn't exist."
+            "description": "Track with id {trackId} does not exist"
           }
         }
       },
@@ -1081,10 +919,7 @@
             "description": "Deleted succesfully"
           },
           "400": {
-            "description": "Bad. trackId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad Request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Track was not found."
@@ -1113,13 +948,10 @@
             "description": "Added succesfully"
           },
           "400": {
-            "description": "Bad. albumId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad Request. Validation failed (uuid  is expected)"
           },
           "422": {
-            "description": "Album with id doesn't exist."
+            "description": "Album with id {albumId} does not exist"
           }
         }
       },
@@ -1132,10 +964,7 @@
             "description": "Deleted succesfully"
           },
           "400": {
-            "description": "Bad. albumId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad Request. Validation failed (uuid  is expected)"
           },
           "404": {
             "description": "Album was not found."
@@ -1164,13 +993,10 @@
             "description": "Added succesfully"
           },
           "400": {
-            "description": "Bad request. artistId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
+            "description": "Bad Request. Validation failed (uuid  is expected)"
           },
           "422": {
-            "description": "Artist with id doesn't exist."
+            "description": "Artist with id {artistId} does not exist"
           }
         }
       },
@@ -1184,9 +1010,6 @@
           },
           "400": {
             "description": "Bad request. artistId is invalid (not uuid)"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedError"
           },
           "404": {
             "description": "Artist was not found."

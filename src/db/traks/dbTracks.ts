@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { TrackEntity } from './tracksEntety';
 import { TrackDto } from 'src/tracks/dto/trackDto';
@@ -23,7 +23,7 @@ export class TracksDb {
   get(id: string) {
     const track = this.db.find((el) => el.id === id);
     if (!track) {
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Track not found');
     }
     return track;
   }

@@ -23,5 +23,6 @@ export class ArtistsService {
     DbService.artists.delete(id);
     DbService.tracks.updateScpecific(id, 'artistId');
     DbService.albums.updateScpecific(id, 'artistId');
+    DbService.favs.deleteScpecific(id, 'artists');
   }
 }

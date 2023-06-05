@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { UserEntity } from './userEntety';
 import { CreateUserDto } from 'src/users/dto/createUserDto';
@@ -28,7 +28,7 @@ export class UsersDb {
   get(id: string) {
     const user = this.db.find((el) => el.id === id);
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
     return user;
   }

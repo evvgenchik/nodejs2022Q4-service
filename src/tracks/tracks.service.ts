@@ -21,5 +21,6 @@ export class TracksService {
   }
   async delete(id: string) {
     DbService.tracks.delete(id);
+    DbService.favs.deleteScpecific(id, 'tracks');
   }
 }

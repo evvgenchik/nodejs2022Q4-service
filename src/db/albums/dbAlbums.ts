@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { AlbumEntity } from './albumEntety';
 import { AlbumDto } from 'src/albums/dto/albumDto';
@@ -23,7 +23,7 @@ export class AlbumsDb {
   get(id: string) {
     const album = this.db.find((el) => el.id === id);
     if (!album) {
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
     return album;
   }

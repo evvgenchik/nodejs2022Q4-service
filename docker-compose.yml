@@ -6,7 +6,7 @@ services:
     networks:
       - postgres
     volumes:
-      - /data/postgres:/data/postgres
+      - postgres_data:/data/postgres
     env_file:
       - docker.env
 
@@ -40,3 +40,6 @@ services:
 networks:
   postgres:
     driver: bridge
+
+volumes:
+  postgres_data:

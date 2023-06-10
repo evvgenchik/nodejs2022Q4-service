@@ -22,7 +22,7 @@ export class UsersDb {
   }
 
   getAll() {
-    return 'this.db';
+    return this.db;
   }
 
   get(id: string) {

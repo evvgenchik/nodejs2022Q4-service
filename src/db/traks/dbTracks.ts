@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { TrackEntity } from './tracksEntety';
-import { TrackDto } from 'src/tracks/dto/trackDto';
+import { TrackDto } from '../../tracks/dto/trackDto';
 
 export class TracksDb {
   private db = [];

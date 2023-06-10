@@ -1,6 +1,6 @@
-import { AlbumEntity } from 'src/db/albums/albumEntety';
-import { ArtistEntity } from 'src/db/artists/artistEntety';
-import { TrackEntity } from 'src/db/traks/tracksEntety';
+import { AlbumEntity } from '../../db/albums/albumEntety';
+import { ArtistEntity } from '../../db/artists/artistEntety';
+import { TrackEntity } from '../../db/traks/tracksEntety';
 
 export class TrackDto {
   readonly tracks: TrackEntity[]; // refers to Artist

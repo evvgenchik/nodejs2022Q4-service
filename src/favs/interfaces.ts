@@ -1,6 +1,6 @@
-import { AlbumEntity } from 'src/db/albums/albumEntety';
-import { TrackEntity } from 'src/db/traks/tracksEntety';
-import { UserEntity } from 'src/db/users/userEntety';
+import { AlbumEntity } from '../db/albums/albumEntety';
+import { TrackEntity } from '../db/traks/tracksEntety';
+import { UserEntity } from '../db/users/userEntety';
 
 interface DbFavs {
   artists: UserEntity[];

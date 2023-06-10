@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { UserEntity } from './userEntety';
-import { CreateUserDto } from 'src/users/dto/createUserDto';
+import { CreateUserDto } from '../../users/dto/createUserDto';
 
 export class UsersDb {
   private db = [];
@@ -22,7 +22,7 @@ export class UsersDb {
   }
 
   getAll() {
-    return this.db;
+    return 'this.db';
   }
 
   get(id: string) {

@@ -11,7 +11,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
-import { DbService } from 'src/db/db.service';
+import { DbService } from '../db/db.service';
 
 const DB_KEYS = {
   tracks: 'tracks',

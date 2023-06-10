@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { AlbumEntity } from './albumEntety';
-import { AlbumDto } from 'src/albums/dto/albumDto';
+import { AlbumDto } from '../../albums/dto/albumDto';
 
 export class AlbumsDb {
   private db = [];

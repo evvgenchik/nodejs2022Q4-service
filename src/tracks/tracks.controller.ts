@@ -10,7 +10,7 @@ import {
   Delete,
   HttpCode,
 } from '@nestjs/common';
-import { ValidationPipe } from 'src/pipes/validation.pipe';
+import { ValidationPipe } from '../pipes/validation.pipe';
 import { TrackDto } from './dto/trackDto';
 import { TracksService } from './tracks.service';
 

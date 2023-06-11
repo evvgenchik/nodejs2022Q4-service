@@ -8,7 +8,7 @@ async function bootstrap() {
   const PORT = process.env.PORT || 4001;
   const app = await NestFactory.create(AppModule);
 
-  const pathToFile = path.join(__dirname, '../doc/doc.json');
+  const pathToFile = path.join(__dirname, '../../doc/doc.json');
   const document = JSON.parse(await readFile(pathToFile, { encoding: 'utf8' }));
   SwaggerModule.setup('doc', app, document);
 

@@ -1,61 +1,61 @@
-import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-import { UserEntity } from './userEntety';
-import { CreateUserDto } from '../../users/dto/createUserDto';
+// import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+// import { v4 as uuidv4 } from 'uuid';
+// import { UserEntity } from './userEntety';
+// import { CreateUserDto } from '../../users/dto/createUserDto';
 
-export class UsersDb {
-  private db = [];
+// export class UsersDb {
+//   private db = [];
 
-  create(dto: CreateUserDto) {
-    const date = new Date();
-    const user = new UserEntity({
-      id: uuidv4(),
-      version: 1,
-      createdAt: +date,
-      updatedAt: +date,
-      password: dto.password,
-      login: dto.login,
-    });
+//   create(dto: CreateUserDto) {
+//     const date = new Date();
+//     const user = new UserEntity({
+//       id: uuidv4(),
+//       version: 1,
+//       createdAt: +date,
+//       updatedAt: +date,
+//       password: dto.password,
+//       login: dto.login,
+//     });
 
-    this.db.push(user);
-    return user;
-  }
+//     this.db.push(user);
+//     return user;
+//   }
 
-  getAll() {
-    return this.db;
-  }
+//   getAll() {
+//     return this.db;
+//   }
 
-  get(id: string) {
-    const user = this.db.find((el) => el.id === id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-    return user;
-  }
+//   get(id: string) {
+//     const user = this.db.find((el) => el.id === id);
+//     if (!user) {
+//       throw new NotFoundException('User not found');
+//     }
+//     return user;
+//   }
 
-  update(id: string, newUser) {
-    const user = this.db.find((el) => el.id === id);
+//   update(id: string, newUser) {
+//     const user = this.db.find((el) => el.id === id);
 
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
-    if (user.password !== newUser.oldPassword) {
-      throw new HttpException('Old password incorrect', HttpStatus.FORBIDDEN);
-    }
+//     if (!user) {
+//       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+//     }
+//     if (user.password !== newUser.oldPassword) {
+//       throw new HttpException('Old password incorrect', HttpStatus.FORBIDDEN);
+//     }
 
-    user.password = newUser.newPassword;
-    user.version = ++user.version;
-    user.updatedAt = +new Date();
-    return user;
-  }
+//     user.password = newUser.newPassword;
+//     user.version = ++user.version;
+//     user.updatedAt = +new Date();
+//     return user;
+//   }
 
-  delete(id: string) {
-    const userIndex = this.db.findIndex((el) => el.id === id);
+//   delete(id: string) {
+//     const userIndex = this.db.findIndex((el) => el.id === id);
 
-    if (userIndex === -1) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
+//     if (userIndex === -1) {
+//       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+//     }
 
-    this.db.splice(userIndex, 1);
-  }
-}
+//     this.db.splice(userIndex, 1);
+//   }
+// }

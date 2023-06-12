@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 async function main() {
   // create two dummy articles
   const user = await prisma.user.upsert({
-    where: { login: 'Evgen' },
+    where: {},
     update: {},
     create: {
       login: 'Evgen',

@@ -1,27 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/createUserDto';
-import { DbService } from '../db/db.service';
 import { UpdateUserDto } from './dto/updateUserDto';
 import { PrismaService } from '../prisma/prisma.service';
+import { plainToClass } from '@nestjs/class-transformer';
+import { UserEntity } from './userEntety';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
-    const user = DbService.users.create(dto);
-    return user;
+    const user = await this.prisma.user.create({ data: { ...dto } });
+    const userTransformed = plainToClass(UserEntity, user);
+    return userTransformed;
   }
+
   async getAll() {
-    return this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany();
+    const allUsersTransformed = users.map((user) =>
+      plainToClass(UserEntity, user),
+    );
+    return allUsersTransformed;
   }
+
   async get(id: string) {
-    return DbService.users.get(id);
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const userTransformed = plainToClass(UserEntity, user);
+    return userTransformed;
   }
-  async update(id: string, dto: UpdateUserDto) {
-    return DbService.users.update(id, dto);
+
+  async update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    if (user.password !== oldPassword) {
+      throw new HttpException('Old password incorrect', HttpStatus.FORBIDDEN);
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        version: ++user.version,
+        password: newPassword,
+      },
+    });
+    const userTransformed = plainToClass(UserEntity, updatedUser);
+
+    return userTransformed;
   }
+
   async delete(id: string) {
-    DbService.users.delete(id);
+    const user = await this.get(id);
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.prisma.user.delete({ where: { id } });
   }
 }

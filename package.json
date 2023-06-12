@@ -23,6 +23,7 @@
     "docker:scan": "docker scout cves nodejs2022q4-service-api:latest"
   },
   "dependencies": {
+    "@nestjs/class-transformer": "^0.4.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^8.0.0",

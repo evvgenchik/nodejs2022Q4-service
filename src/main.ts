@@ -11,6 +11,7 @@ async function bootstrap() {
   const pathToFile = path.join(__dirname, '../../doc/doc.json');
   const document = JSON.parse(await readFile(pathToFile, { encoding: 'utf8' }));
   SwaggerModule.setup('doc', app, document);
+  //app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 }

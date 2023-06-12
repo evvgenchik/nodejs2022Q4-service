@@ -1,28 +1,61 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DbService } from '../db/db.service';
 import { ArtistDto } from './dto/artistDto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private database: DbService) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(dto: ArtistDto) {
-    const user = DbService.artists.create(dto);
-    return user;
+    const artist = await this.prisma.artist.create({ data: { ...dto } });
+    return artist;
   }
+
   async getAll() {
-    return DbService.artists.getAll();
+    const artists = await this.prisma.artist.findMany();
+    return artists;
   }
+
   async get(id: string) {
-    return DbService.artists.get(id);
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
+
+    if (!artist) {
+      throw new NotFoundException('User not found');
+    }
+
+    return artist;
   }
+
   async update(id: string, dto: ArtistDto) {
-    return DbService.artists.update(id, dto);
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
+
+    if (!artist) {
+      throw new NotFoundException('User not found');
+    }
+
+    const updatedTrack = await this.prisma.artist.update({
+      where: {
+        id,
+      },
+      data: {
+        ...dto,
+      },
+    });
+    return updatedTrack;
   }
+
   async delete(id: string) {
-    DbService.artists.delete(id);
-    DbService.tracks.updateScpecific(id, 'artistId');
-    DbService.albums.updateScpecific(id, 'artistId');
-    DbService.favs.deleteScpecific(id, 'artists');
+    const artist = await this.prisma.artist.findUnique({ where: { id } });
+
+    if (!artist) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.prisma.artist.delete({ where: { id } });
+
+    // DbService.tracks.updateScpecific(id, 'artistId');
+    // DbService.albums.updateScpecific(id, 'artistId');
+    // DbService.favs.deleteScpecific(id, 'artists');
   }
 }

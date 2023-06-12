@@ -13,7 +13,7 @@ datasource db {
 
 model User {
   id          String      @id @default(uuid())
-  login       String   //@unique
+  login       String   
   password    String 
   version     Int      @default(1)
   createdAt   DateTime @default(now())
@@ -24,21 +24,27 @@ model Artist {
   id String @id @default(uuid())
   name String
   grammy Boolean
+  tracks Track[]
+  albums Album[]
 }
 
 model Track {
   id String @id @default(uuid())
   name String
-  artistId String? 
-  albumId String? 
   duration Int 
+  artistId String?
+  artist Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  albumId String? 
+  album Album?  @relation(fields: [albumId], references: [id], onDelete: SetNull)
 }
 
 model Album {
   id String @id @default(uuid())
   name String
   year Int
-  artistId String?  // refers to Artist
+  artistId String?  
+  artist Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  tracks Track[]
 }
 
 model Favorites {

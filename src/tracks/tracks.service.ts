@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { DbService } from '../db/db.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { TrackDto } from './dto/trackDto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TracksService {
-  constructor(private database: DbService) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(dto: TrackDto) {
-    const user = DbService.tracks.create(dto);
-    return user;
+    const track = await this.prisma.track.create({ data: { ...dto } });
+    return track;
   }
+
   async getAll() {
-    return DbService.tracks.getAll();
+    const tracks = await this.prisma.track.findMany();
+    return tracks;
   }
+
   async get(id: string) {
-    return DbService.tracks.get(id);
+    const track = await this.prisma.track.findUnique({ where: { id } });
+
+    if (!track) {
+      throw new NotFoundException('Track not found');
+    }
+
+    return track;
   }
+
   async update(id: string, dto: TrackDto) {
-    return DbService.tracks.update(id, dto);
+    const track = await this.prisma.track.findUnique({ where: { id } });
+
+    if (!track) {
+      throw new NotFoundException('Track not found');
+    }
+
+    const updatedTrack = await this.prisma.track.update({
+      where: {
+        id,
+      },
+      data: {
+        ...dto,
+      },
+    });
+    return updatedTrack;
   }
+
   async delete(id: string) {
-    DbService.tracks.delete(id);
-    DbService.favs.deleteScpecific(id, 'tracks');
+    const track = await this.prisma.track.findUnique({ where: { id } });
+
+    if (!track) {
+      throw new NotFoundException('Track not found');
+    }
+
+    await this.prisma.track.delete({ where: { id } });
   }
 }

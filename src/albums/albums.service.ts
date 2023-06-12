@@ -1,27 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { DbService } from '../db/db.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AlbumDto } from './dto/albumDto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AlbumsService {
-  constructor(private database: DbService) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(dto: AlbumDto) {
-    const user = DbService.albums.create(dto);
-    return user;
+    const album = await this.prisma.album.create({ data: { ...dto } });
+    return album;
   }
+
   async getAll() {
-    return DbService.albums.getAll();
+    const albums = await this.prisma.album.findMany();
+    return albums;
   }
+
   async get(id: string) {
-    return DbService.albums.get(id);
+    const album = await this.prisma.album.findUnique({ where: { id } });
+
+    if (!album) {
+      throw new NotFoundException('Album not found');
+    }
+
+    return album;
   }
+
   async update(id: string, dto: AlbumDto) {
-    return DbService.albums.update(id, dto);
+    const album = await this.prisma.album.findUnique({ where: { id } });
+
+    if (!album) {
+      throw new NotFoundException('Album not found');
+    }
+
+    const updatedTrack = await this.prisma.album.update({
+      where: {
+        id,
+      },
+      data: {
+        ...dto,
+      },
+    });
+    return updatedTrack;
   }
+
   async delete(id: string) {
-    DbService.albums.delete(id);
-    DbService.tracks.updateScpecific(id, 'albumId');
-    DbService.favs.deleteScpecific(id, 'albums');
+    const album = await this.prisma.album.findUnique({ where: { id } });
+
+    if (!album) {
+      throw new NotFoundException('Album not found');
+    }
+
+    await this.prisma.album.delete({ where: { id } });
   }
 }

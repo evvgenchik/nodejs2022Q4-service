@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres_data:/data/postgres
     env_file:
-      - docker.env
+      - .env
 
   # pgadmin:
   #   restart: always
@@ -22,7 +22,15 @@ services:
   #   volumes:
   #     - /data/pgadmin:/root/.pgadmin
   #   env_file:
-  #     - docker.env
+  #     - .env
+
+  adminer:
+    networks:
+      - my-net
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
   # api:
   #   restart: always

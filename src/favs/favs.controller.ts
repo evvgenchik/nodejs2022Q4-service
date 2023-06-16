@@ -6,20 +6,19 @@ import {
   Param,
   Delete,
   HttpCode,
-  HttpStatus,
-  HttpException,
-  NotFoundException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { FavsService } from './favs.service';
-import { DbService } from '../db/db.service';
 
 const DB_KEYS = {
-  tracks: 'tracks',
-  albums: 'albums',
-  artists: 'artists',
+  tracks: 'FavoriteTrack',
+  albums: 'FavoriteAlbum',
+  artists: 'FavoriteArtist',
 };
 
 @Controller('favs')
+@UseInterceptors(ClassSerializerInterceptor)
 export class FavsController {
   constructor(private favsService: FavsService) {}
   @Get('')
@@ -29,55 +28,31 @@ export class FavsController {
 
   @Post('track/:id')
   addTrack(@Param('id', new ParseUUIDPipe()) id: string) {
-    try {
-      DbService.tracks.get(id);
-      return this.favsService.add(id, DB_KEYS.tracks);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new HttpException('Forbidden', HttpStatus.UNPROCESSABLE_ENTITY);
-      }
-      throw error;
-    }
+    return this.favsService.add(id, DB_KEYS.tracks, 'trackId', 'track');
   }
   @Delete('track/:id')
   @HttpCode(204)
   deleteTrack(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.delete(id, DB_KEYS.tracks);
+    return this.favsService.delete(id, DB_KEYS.tracks, 'trackId');
   }
 
   @Post('album/:id')
   addAlbum(@Param('id', new ParseUUIDPipe()) id: string) {
-    try {
-      DbService.albums.get(id);
-      return this.favsService.add(id, DB_KEYS.albums);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new HttpException('Forbidden', HttpStatus.UNPROCESSABLE_ENTITY);
-      }
-      throw error;
-    }
+    return this.favsService.add(id, DB_KEYS.albums, 'albumId', 'album');
   }
   @Delete('album/:id')
   @HttpCode(204)
   deleteAlbum(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.delete(id, DB_KEYS.albums);
+    return this.favsService.delete(id, DB_KEYS.albums, 'albumId');
   }
 
   @Post('artist/:id')
   addArtist(@Param('id', new ParseUUIDPipe()) id: string) {
-    try {
-      DbService.artists.get(id);
-      return this.favsService.add(id, DB_KEYS.artists);
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new HttpException('Forbidden', HttpStatus.UNPROCESSABLE_ENTITY);
-      }
-      throw error;
-    }
+    return this.favsService.add(id, DB_KEYS.artists, 'artistId', 'artist');
   }
   @Delete('artist/:id')
   @HttpCode(204)
   deleteArtist(@Param('id', new ParseUUIDPipe()) id: string) {
-    return this.favsService.delete(id, DB_KEYS.artists);
+    return this.favsService.delete(id, DB_KEYS.artists, 'artistId');
   }
 }

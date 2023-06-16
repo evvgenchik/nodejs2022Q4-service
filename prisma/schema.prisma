@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id          String      @id @default(uuid())
   login       String   
@@ -26,6 +25,7 @@ model Artist {
   grammy Boolean
   tracks Track[]
   albums Album[]
+  favorites FavoriteArtist[]
 }
 
 model Track {
@@ -36,6 +36,7 @@ model Track {
   artist Artist?  @relation(fields: [artistId], references: [id], onDelete: SetNull)
   albumId String? 
   album Album?  @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  favorites FavoriteTrack[]
 }
 
 model Album {
@@ -45,13 +46,18 @@ model Album {
   artistId String?  
   artist Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull)
   tracks Track[]
+  favorites FavoriteAlbum[]
 }
 
-model Favorites {
-  id String @id @default(uuid())
-  artists String[]
-  albums String[]  
-  tracks String[] 
-  }
-
-
+model FavoriteAlbum{
+  album Album @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId String @unique
+}
+model FavoriteTrack{
+  track Track @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  trackId String @unique
+}
+model FavoriteArtist{
+  artist Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId String @unique
+}

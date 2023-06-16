@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DbService } from '../db/db.service';
 import { ArtistDto } from './dto/artistDto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -53,9 +52,5 @@ export class ArtistsService {
     }
 
     await this.prisma.artist.delete({ where: { id } });
-
-    // DbService.tracks.updateScpecific(id, 'artistId');
-    // DbService.albums.updateScpecific(id, 'artistId');
-    // DbService.favs.deleteScpecific(id, 'artists');
   }
 }

@@ -8,9 +8,21 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - postgres_data:/data/postgres
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
+    command:
+      [
+        'postgres',
+        '-c',
+        'logging_collector=on',
+        '-c',
+        'log_directory=/var/lib/postgresql/data/log',
+        '-c',
+        'log_filename=postgres.log',
+        '-c',
+        'log_statement=all',
+      ]
 
   # pgadmin:
   #   restart: always
@@ -25,10 +37,10 @@ services:
   #     - .env
 
   adminer:
+    restart: always
     networks:
       - my-net
     image: adminer
-    restart: always
     ports:
       - 8080:8080
 

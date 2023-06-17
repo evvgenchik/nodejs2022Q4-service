@@ -8,6 +8,7 @@ export class AlbumEntity {
   @Exclude()
   albumId: string;
 }
+
 export class ArtistEntity {
   constructor(partial: Partial<ArtistEntity>) {
     Object.assign(this, partial);
@@ -16,6 +17,7 @@ export class ArtistEntity {
   @Exclude()
   artistId: string;
 }
+
 export class TrackEntity {
   constructor(partial: Partial<TrackEntity>) {
     Object.assign(this, partial);

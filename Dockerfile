@@ -1,7 +1,8 @@
 FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN yarn install
+COPY prisma ./prisma/
 COPY . .
-EXPOSE 3000
-CMD ["npm", "run", "nodemon"]
+RUN yarn install
+EXPOSE 4000
+CMD ["npm", "run", "start:prisma"]

@@ -20,6 +20,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "nodemon": "nodemon --legacy-watch -x ts-node src/main.ts",
+    "start:prisma": "npx prisma generate && npx prisma migrate dev && nodemon --legacy-watch -x ts-node src/main.ts",
     "docker:scan": "docker scout cves nodejs2022q4-service-api:latest"
   },
   "dependencies": {

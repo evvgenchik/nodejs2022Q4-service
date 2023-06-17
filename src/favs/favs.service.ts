@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AlbumEntity, ArtistEntity, TrackEntity } from './favEntety';
 import { plainToClass } from '@nestjs/class-transformer';
 

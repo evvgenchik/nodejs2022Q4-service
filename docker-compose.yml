@@ -36,28 +36,28 @@ services:
   #   env_file:
   #     - .env
 
-  adminer:
-    restart: always
-    networks:
-      - my-net
-    image: adminer
-    ports:
-      - 8080:8080
-
-  # api:
+  # adminer:
   #   restart: always
-  #   build: .
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - '4000:4000'
-  #   depends_on:
-  #     - postgres
   #   networks:
   #     - my-net
-  #   volumes:
-  #     - /app/node_modules
-  #     - .:/app
+  #   image: adminer
+  #   ports:
+  #     - '8080:8080'
+
+  api:
+    restart: always
+    build: ./
+    env_file:
+      - .env
+    ports:
+      - '4000:4000'
+    networks:
+      - my-net
+    volumes:
+      - /app/node_modules
+      - ./:/app
+    depends_on:
+      - postgres
 
 networks:
   my-net:

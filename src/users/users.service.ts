@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -43,10 +44,10 @@ export class UsersService {
     const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
     if (user.password !== oldPassword) {
-      throw new HttpException('Old password incorrect', HttpStatus.FORBIDDEN);
+      throw new ForbiddenException('Old password incorrect');
     }
 
     const updatedUser = await this.prisma.user.update({
@@ -67,7 +68,7 @@ export class UsersService {
     const user = await this.get(id);
 
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
 
     await this.prisma.user.delete({ where: { id } });

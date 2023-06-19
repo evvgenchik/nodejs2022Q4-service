@@ -12,21 +12,23 @@ export class FavsService {
   constructor(private prisma: PrismaService) {}
 
   async getAll() {
-    const favoriteAlbum = await this.prisma.favoriteAlbum.findMany({
-      include: {
-        album: true,
-      },
-    });
-    const favoriteTraks = await this.prisma.favoriteTrack.findMany({
-      include: {
-        track: true,
-      },
-    });
-    const favoriteArtist = await this.prisma.favoriteArtist.findMany({
-      include: {
-        artist: true,
-      },
-    });
+    const [favoriteAlbum, favoriteTraks, favoriteArtist] = await Promise.all([
+      this.prisma.favoriteAlbum.findMany({
+        include: {
+          album: true,
+        },
+      }),
+      this.prisma.favoriteTrack.findMany({
+        include: {
+          track: true,
+        },
+      }),
+      this.prisma.favoriteArtist.findMany({
+        include: {
+          artist: true,
+        },
+      }),
+    ]);
 
     const albums = favoriteAlbum.map((el) =>
       plainToClass(AlbumEntity, el.album),
@@ -41,7 +43,7 @@ export class FavsService {
     return { albums: albums, tracks: tracks, artists: artists };
   }
 
-  async add(id: string, dbKey: string, objKey: string, checkerKey: string) {
+  async add(id: string, dbKey: string, entetyKey: string, checkerKey: string) {
     const entety = await this.prisma[checkerKey].findUnique({
       where: { id },
     });
@@ -51,15 +53,15 @@ export class FavsService {
     }
 
     const fav = await this.prisma[dbKey].create({
-      data: { [objKey]: id },
+      data: { [entetyKey]: id },
     });
 
     return fav;
   }
 
-  async delete(id: string, dbKey: string, objKey: string) {
+  async delete(id: string, dbKey: string, entetyKey: string) {
     const favEntity = await this.prisma[dbKey].findUnique({
-      where: { [objKey]: id },
+      where: { [entetyKey]: id },
     });
 
     if (!favEntity) {
@@ -68,7 +70,7 @@ export class FavsService {
 
     await this.prisma[dbKey].delete({
       where: {
-        [objKey]: id,
+        [entetyKey]: id,
       },
     });
   }

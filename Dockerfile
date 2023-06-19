@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 COPY . .
-RUN yarn install
+RUN npm install --legacy-peer-deps && npm cache clean --force
+RUN npx prisma generate
 EXPOSE 4000
-CMD ["npm", "run", "start:prisma" && "npm", "run", "nodemon"]
+CMD ["npm", "run", "prisma"]

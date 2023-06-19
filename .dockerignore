@@ -3,6 +3,8 @@ dist
 Dockerfile
 db
 .git
+README.md
+.dockerignore
 
 # Logs
 logs

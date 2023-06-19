@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/evvgenchik/nodejs2022Q4-service.git
 ```
 
 ## Installing NPM modules
@@ -17,15 +17,28 @@ git clone {repository URL}
 npm install
 ```
 
-## Running application
+## Environment
+
+Create `.env` file using `.env.example` as a pattern.
+
+You can change default port (4000 as default) and db properties.
+
+## Running application in Docker container
 
 ```
-npm start
+docker-compose up
 ```
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Scanning
+
+To run npm script for vulnerabilities scanning:
+
+```
+npm run docker:scan
+```
 
 ## Testing
 

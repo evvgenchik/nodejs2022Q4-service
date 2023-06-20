@@ -26,7 +26,7 @@ export class UsersService {
     const allUsersTransformed = users.map((user) =>
       plainToClass(UserEntity, user),
     );
-    return 'allUsersTransformed';
+    return allUsersTransformed;
   }
 
   async get(id: string) {

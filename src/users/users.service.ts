@@ -1,0 +1,75 @@
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateUserDto } from './dto/createUserDto';
+import { UpdateUserDto } from './dto/updateUserDto';
+import { PrismaService } from '../prisma/prisma.service';
+import { plainToClass } from '@nestjs/class-transformer';
+import { UserEntity } from './userEntety';
+
+@Injectable()
+export class UsersService {
+  constructor(private prisma: PrismaService) {}
+
+  async create(dto: CreateUserDto) {
+    const user = await this.prisma.user.create({ data: { ...dto } });
+    const userTransformed = plainToClass(UserEntity, user);
+    return userTransformed;
+  }
+
+  async getAll() {
+    const users = await this.prisma.user.findMany();
+    const allUsersTransformed = users.map((user) =>
+      plainToClass(UserEntity, user),
+    );
+    return allUsersTransformed;
+  }
+
+  async get(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const userTransformed = plainToClass(UserEntity, user);
+    return userTransformed;
+  }
+
+  async update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    if (user.password !== oldPassword) {
+      throw new HttpException('Old password incorrect', HttpStatus.FORBIDDEN);
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        version: ++user.version,
+        password: newPassword,
+      },
+    });
+    const userTransformed = plainToClass(UserEntity, updatedUser);
+
+    return userTransformed;
+  }
+
+  async delete(id: string) {
+    const user = await this.get(id);
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    await this.prisma.user.delete({ where: { id } });
+  }
+}

@@ -8,6 +8,7 @@ import { FavsModule } from './favs/favs.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MyLogger } from './logger/my-logger.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MyLogger } from './logger/my-logger.service';
     FavsModule,
     PrismaModule,
     MyLogger,
+    AuthModule,
   ],
 })
 export class AppModule {

@@ -40,6 +40,17 @@ export class UsersService {
     return userTransformed;
   }
 
+  async getByLogin(login: string) {
+    const user = await this.prisma.user.findUnique({ where: { login } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const userTransformed = plainToClass(UserEntity, user);
+    return userTransformed;
+  }
+
   async update(id: string, { oldPassword, newPassword }: UpdateUserDto) {
     const user = await this.prisma.user.findUnique({ where: { id } });
 

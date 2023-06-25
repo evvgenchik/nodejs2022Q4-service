@@ -26,7 +26,6 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document);
 
   app.useGlobalFilters(new HttpExceptionFilter());
-  //app.useGlobalPipes(new ValidationPipe());
 
   // setTimeout(() => Promise.reject(new Error('unhandledRejection test')), 1);
   // setTimeout(() => {

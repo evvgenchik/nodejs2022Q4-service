@@ -1,4 +1,3 @@
-import { ConsoleLogger } from '@nestjs/common';
 import { LoggerService } from '@nestjs/common';
 import * as fs from 'node:fs';
 import * as path from 'node:path';

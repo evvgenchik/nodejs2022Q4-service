@@ -1,4 +1,4 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { MyLogger } from './my-logger.service';
 
@@ -27,25 +27,7 @@ export class LoggerMiddleware implements NestMiddleware {
       }
 
       return this.logger.log(message);
-
-      // this.logger.log(
-      //   `Logging HTTP request: url:${req.url}, query: ${JSON.stringify(
-      //     req.query,
-      //   )}, body: ${JSON.stringify(req.body)}, response-code: ${
-      //     res.statusCode
-      //   }`,
-      // );
     });
-
-    // res.on('error', () => {
-    //   this.logger.log(
-    //     `Error: url:${req.url}, query: ${JSON.stringify(
-    //       req.query,
-    //     )}, body: ${JSON.stringify(req.body)}, response-code: ${
-    //       res.statusCode
-    //     }`,
-    //   );
-    // });
 
     next();
   }

@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule } from '@nestjs/swagger';
 import { readFile } from 'node:fs/promises';
 import * as path from 'path';
-import { HttpExceptionFilter } from './exceptionFilter/exceptionFilter';
+import { HttpExceptionFilter } from './common/exceptionFilter/exceptionFilter';
 import { MyLogger } from './logger/my-logger.service';
 
 const addUncaughtHandlers = (logger: MyLogger) => {

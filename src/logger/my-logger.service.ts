@@ -1,6 +1,8 @@
 import { ConsoleLogger } from '@nestjs/common';
+import { LoggerService } from '@nestjs/common';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { isLogEnable } from './utils';
 
 const COLOR = {
   RED: '\x1b[31m',
@@ -15,18 +17,38 @@ const MESSAGES = {
   WARN: 'WARN: ',
 };
 
-export class MyLogger extends ConsoleLogger {
+export class MyLogger implements LoggerService {
   log(message: any, ...optionalParams: any[]) {
+    if (!isLogEnable('log')) return;
+
     console.log(COLOR.GREEN + MESSAGES.LOG + message + COLOR.GREY);
     this.logToFile(MESSAGES.LOG + message);
   }
 
   error(message: any, ...optionalParams: any[]) {
+    if (!isLogEnable('error')) return;
+
     console.log(COLOR.RED + MESSAGES.ERROR + message + COLOR.GREY);
     this.errorToFile(MESSAGES.ERROR + message);
   }
 
   warn(message: any, ...optionalParams: any[]) {
+    if (!isLogEnable('warn')) return;
+
+    console.log(COLOR.YELLOW + MESSAGES.WARN + message + COLOR.GREY);
+    this.logToFile(MESSAGES.WARN + message);
+  }
+
+  debug?(message: any, ...optionalParams: any[]) {
+    if (!isLogEnable('warn')) return;
+
+    console.log(COLOR.YELLOW + MESSAGES.WARN + message + COLOR.GREY);
+    this.logToFile(MESSAGES.WARN + message);
+  }
+
+  verbose?(message: any, ...optionalParams: any[]) {
+    if (!isLogEnable('warn')) return;
+
     console.log(COLOR.YELLOW + MESSAGES.WARN + message + COLOR.GREY);
     this.logToFile(MESSAGES.WARN + message);
   }

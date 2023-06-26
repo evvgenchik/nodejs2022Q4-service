@@ -100,6 +100,9 @@ export class UsersService {
 
   async verifyRefreshToken(refreshToken: string, login: string) {
     const user = await this.getByLogin(login);
+    console.log(refreshToken);
+    console.log(user);
+
     const isRefreshTokenMatching = await bcrytp.compare(
       refreshToken,
       user.hashedRefreshToken,

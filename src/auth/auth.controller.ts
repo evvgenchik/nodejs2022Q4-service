@@ -15,11 +15,15 @@ import { CreateUserDto } from '../users/dto/createUserDto';
 import { LocalAuthenticationGuard } from './authLocal.guard';
 import { Public } from '../common/docorators/public.decorator';
 import JwtRefreshGuard from './jwt-authRefresh.guard copy';
+import { UsersService } from 'src/users/users.service';
 
 @Public()
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('signup')
@@ -30,8 +34,14 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('login')
-  login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Request() req) {
+    const { refreshToken, accessToken } = this.authService.login(req.user);
+    await this.usersService.setCurrentRefreshToken(
+      refreshToken,
+      req.user.login,
+    );
+
+    return { refreshToken, accessToken };
   }
 
   @UseGuards(JwtRefreshGuard)

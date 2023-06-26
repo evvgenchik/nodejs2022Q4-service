@@ -5,6 +5,8 @@ import {
   Post,
   Body,
   UseGuards,
+  Request,
+  Response,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/createUserDto';
@@ -23,7 +25,15 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('login')
-  login(@Body() loginDto: CreateUserDto) {
-    return this.authService.login(loginDto.login, loginDto.password);
+  login(@Request() req, @Response() res) {
+    const cookie = this.authService.login(req.user);
+    res.setHeader('Set-Cookie', cookie);
+    return res.send();
+    // const { user } = loginDto;
+    // const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
+    // response.setHeader('Set-Cookie', cookie);
+    // user.password = undefined;
+    // return response.send(user);
+    // return this.authService.login(loginDto.login, loginDto.password);
   }
 }

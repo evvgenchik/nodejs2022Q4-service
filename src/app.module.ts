@@ -9,10 +9,14 @@ import { PrismaModule } from './prisma/prisma.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { MyLogger } from './logger/my-logger.service';
 import { AuthModule } from './auth/auth.module';
+import { config } from './config/configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+    }),
     UsersModule,
     ArtistsModule,
     TracksModule,

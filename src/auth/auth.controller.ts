@@ -27,10 +27,8 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('login')
-  login(@Request() req, @Response() res) {
-    const cookie = this.authService.login(req.user);
-    res.setHeader('Set-Cookie', cookie);
-    return res.send();
+  login(@Request() req) {
+    return this.authService.login(req.user);
     // const { user } = loginDto;
     // const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
     // response.setHeader('Set-Cookie', cookie);

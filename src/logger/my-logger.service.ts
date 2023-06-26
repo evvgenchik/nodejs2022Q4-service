@@ -17,35 +17,35 @@ const MESSAGES = {
 };
 
 export class MyLogger implements LoggerService {
-  log(message: any, ...optionalParams: any[]) {
+  log(message: any) {
     if (!isLogEnable('log')) return;
 
     console.log(COLOR.GREEN + MESSAGES.LOG + message + COLOR.GREY);
     this.logToFile(MESSAGES.LOG + message);
   }
 
-  error(message: any, ...optionalParams: any[]) {
+  error(message: any) {
     if (!isLogEnable('error')) return;
 
     console.log(COLOR.RED + MESSAGES.ERROR + message + COLOR.GREY);
     this.errorToFile(MESSAGES.ERROR + message);
   }
 
-  warn(message: any, ...optionalParams: any[]) {
+  warn(message: any) {
     if (!isLogEnable('warn')) return;
 
     console.log(COLOR.YELLOW + MESSAGES.WARN + message + COLOR.GREY);
     this.logToFile(MESSAGES.WARN + message);
   }
 
-  debug?(message: any, ...optionalParams: any[]) {
+  debug?(message: any) {
     if (!isLogEnable('warn')) return;
 
     console.log(COLOR.YELLOW + MESSAGES.WARN + message + COLOR.GREY);
     this.logToFile(MESSAGES.WARN + message);
   }
 
-  verbose?(message: any, ...optionalParams: any[]) {
+  verbose?(message: any) {
     if (!isLogEnable('warn')) return;
 
     console.log(COLOR.YELLOW + MESSAGES.WARN + message + COLOR.GREY);

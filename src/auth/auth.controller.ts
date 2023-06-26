@@ -5,17 +5,18 @@ import {
   Post,
   Body,
   UseGuards,
-  Request,
-  Response,
   Get,
   Req,
+  UsePipes,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/createUserDto';
-import { LocalAuthenticationGuard } from './authLocal.guard';
+import { LocalAuthenticationGuard } from './guards/authLocal.guard';
 import { Public } from '../common/docorators/public.decorator';
-import JwtRefreshGuard from './jwt-authRefresh.guard copy';
+import JwtRefreshGuard from './guards/jwt-authRefresh.guard copy';
 import { UsersService } from '../users/users.service';
+import { ValidationPipe } from '../pipes/validation.pipe';
+import { RequestWithUser } from './interfaces';
 
 @Public()
 @Controller('auth')
@@ -25,6 +26,7 @@ export class AuthController {
     private usersService: UsersService,
   ) {}
 
+  @UsePipes(ValidationPipe)
   @HttpCode(HttpStatus.OK)
   @Post('signup')
   signup(@Body() signupDto: CreateUserDto) {
@@ -34,7 +36,7 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('login')
-  async login(@Request() req) {
+  async login(@Req() req: RequestWithUser) {
     const { refreshToken, accessToken } = this.authService.login(req.user);
     await this.usersService.setCurrentRefreshToken(
       refreshToken,
@@ -46,7 +48,7 @@ export class AuthController {
 
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
-  refresh(@Req() request) {
+  refresh(@Req() request: RequestWithUser) {
     return this.authService.refresh(request.user);
   }
 }

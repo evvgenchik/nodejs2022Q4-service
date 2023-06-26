@@ -11,12 +11,8 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../users/dto/createUserDto';
 import { UsersService } from '../users/users.service';
 
-enum PostgresErrorCode {
-  UniqueViolation = '23505',
-}
-
-interface TokenPayload {
-  userId: number;
+enum PrismaErrorCode {
+  UniqueViolation = 'P2002',
 }
 
 @Injectable()
@@ -36,11 +32,13 @@ export class AuthService {
         ...registrationData,
         password: hashedPassword,
       });
+
       createdUser.password = undefined;
+      createdUser.hashedRefreshToken = undefined;
       return createdUser;
     } catch (error) {
-      if (error?.code === PostgresErrorCode.UniqueViolation) {
-        throw new ForbiddenException('User with that email already exists');
+      if (error?.code === PrismaErrorCode.UniqueViolation) {
+        throw new ForbiddenException('User with that login already exists');
       }
 
       throw new HttpException(
@@ -50,22 +48,8 @@ export class AuthService {
     }
   }
 
-  async validateUser(login: string, password: string): Promise<any> {
-    try {
-      const user = await this.usersService.getByLogin(login);
-      await this.verifyPassword(password, user.password);
-      //const payload = { sub: user.userId, username: user.username };
-
-      user.password = undefined;
-
-      return user;
-    } catch (error) {
-      throw new BadRequestException('Wrong credentials provided');
-    }
-  }
-
   login(user: any) {
-    const payload = { login: user.login, userId: user.userId };
+    const payload = { login: user.login, userId: user.id };
     const refreshToken = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET_REFRESH_KEY'),
       expiresIn: `${this.configService.get('TOKEN_REFRESH_EXPIRE_TIME')}`,
@@ -76,14 +60,6 @@ export class AuthService {
       refreshToken,
       accessToken,
     };
-  }
-
-  private async verifyPassword(password: string, hashedPassword: string) {
-    const isPasswordMatching = await bcrypt.compare(password, hashedPassword);
-
-    if (!isPasswordMatching) {
-      throw new BadRequestException('Wrong credentials provided');
-    }
   }
 
   refresh(user: any) {
@@ -100,11 +76,23 @@ export class AuthService {
     };
   }
 
-  private getCookieWithJwtToken(userId: number) {
-    const payload: TokenPayload = { userId };
-    const token = this.jwtService.sign(payload);
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'TOKEN_EXPIRE_TIME',
-    )}`;
+  async validateUser(login: string, password: string): Promise<any> {
+    try {
+      const user = await this.usersService.getByLogin(login);
+      await this.verifyPassword(password, user.password);
+
+      user.password = undefined;
+      return user;
+    } catch (error) {
+      throw new BadRequestException('Wrong credentials provided');
+    }
+  }
+
+  private async verifyPassword(password: string, hashedPassword: string) {
+    const isPasswordMatching = await bcrypt.compare(password, hashedPassword);
+
+    if (!isPasswordMatching) {
+      throw new BadRequestException('Wrong credentials provided');
+    }
   }
 }

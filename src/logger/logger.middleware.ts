@@ -19,7 +19,7 @@ export class LoggerMiddleware implements NestMiddleware {
       )}, response-code: ${statusCode} ${statusMessage}`;
 
       if (statusCode >= 500) {
-        return this.logger.error(message, statusCode);
+        return this.logger.error(message);
       }
 
       if (statusCode >= 400) {

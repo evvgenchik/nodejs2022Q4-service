@@ -29,11 +29,6 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  // setTimeout(() => Promise.reject(new Error('unhandledRejection test')), 1);
-  // setTimeout(() => {
-  //   throw new Error('uncaughtException test');
-  // }, 1);
-
   await app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
   const logger = app.get<MyLogger>(MyLogger);

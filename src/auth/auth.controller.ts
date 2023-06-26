@@ -7,11 +7,14 @@ import {
   UseGuards,
   Request,
   Response,
+  Get,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/createUserDto';
 import { LocalAuthenticationGuard } from './authLocal.guard';
 import { Public } from 'src/common/docorators/public.decorator';
+import JwtRefreshGuard from './jwt-authRefresh.guard copy';
 
 @Public()
 @Controller('auth')
@@ -29,11 +32,11 @@ export class AuthController {
   @Post('login')
   login(@Request() req) {
     return this.authService.login(req.user);
-    // const { user } = loginDto;
-    // const cookie = this.authenticationService.getCookieWithJwtToken(user.id);
-    // response.setHeader('Set-Cookie', cookie);
-    // user.password = undefined;
-    // return response.send(user);
-    // return this.authService.login(loginDto.login, loginDto.password);
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Get('refresh')
+  refresh(@Req() request) {
+    return this.authService.refresh(request.user);
   }
 }

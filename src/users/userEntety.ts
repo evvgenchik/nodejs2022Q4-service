@@ -18,4 +18,7 @@ export class UserEntity {
 
   @Exclude()
   password: string;
+
+  @Exclude()
+  hashedRefreshToken?: string;
 }

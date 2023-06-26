@@ -10,6 +10,7 @@ import { UpdateUserDto } from './dto/updateUserDto';
 import { PrismaService } from '../prisma/prisma.service';
 import { plainToClass } from '@nestjs/class-transformer';
 import { UserEntity } from './userEntety';
+import * as bcrytp from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -83,5 +84,29 @@ export class UsersService {
     }
 
     await this.prisma.user.delete({ where: { id } });
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, login: string) {
+    const hashedRefreshToken = await bcrytp.hash(refreshToken, 10);
+    await this.prisma.user.update({
+      where: {
+        login,
+      },
+      data: {
+        hashedRefreshToken,
+      },
+    });
+  }
+
+  async verifyRefreshToken(refreshToken: string, login: string) {
+    const user = await this.getByLogin(login);
+    const isRefreshTokenMatching = await bcrytp.compare(
+      refreshToken,
+      user.hashedRefreshToken,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
   }
 }

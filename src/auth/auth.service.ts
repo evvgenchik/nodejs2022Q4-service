@@ -79,6 +79,20 @@ export class AuthService {
     }
   }
 
+  refresh(user: any) {
+    const payload = { login: user.login, userId: user.userId };
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_SECRET_REFRESH_KEY'),
+      expiresIn: `${this.configService.get('TOKEN_REFRESH_EXPIRE_TIME')}`,
+    });
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      refreshToken,
+      accessToken,
+    };
+  }
+
   private getCookieWithJwtToken(userId: number) {
     const payload: TokenPayload = { userId };
     const token = this.jwtService.sign(payload);

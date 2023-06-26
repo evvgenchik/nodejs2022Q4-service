@@ -15,7 +15,7 @@ import { CreateUserDto } from '../users/dto/createUserDto';
 import { LocalAuthenticationGuard } from './authLocal.guard';
 import { Public } from '../common/docorators/public.decorator';
 import JwtRefreshGuard from './jwt-authRefresh.guard copy';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 
 @Public()
 @Controller('auth')

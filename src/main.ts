@@ -5,6 +5,7 @@ import { readFile } from 'node:fs/promises';
 import * as path from 'path';
 import { HttpExceptionFilter } from './common/exceptionFilter/exceptionFilter';
 import { MyLogger } from './logger/my-logger.service';
+import * as cookieParser from 'cookie-parser';
 
 const addUncaughtHandlers = (logger: MyLogger) => {
   process.on('unhandledRejection', (err) =>
@@ -20,6 +21,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: false,
   });
+  app.use(cookieParser());
 
   const pathToFile = path.join(__dirname, '../doc/doc.json');
   const document = JSON.parse(await readFile(pathToFile, { encoding: 'utf8' }));

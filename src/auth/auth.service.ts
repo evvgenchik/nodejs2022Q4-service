@@ -8,8 +8,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from 'src/users/dto/createUserDto';
-import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from '../users/dto/createUserDto';
+import { UsersService } from '../users/users.service';
 
 enum PostgresErrorCode {
   UniqueViolation = '23505',

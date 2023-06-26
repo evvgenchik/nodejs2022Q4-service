@@ -11,9 +11,9 @@ import {
   Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from 'src/users/dto/createUserDto';
+import { CreateUserDto } from '../users/dto/createUserDto';
 import { LocalAuthenticationGuard } from './authLocal.guard';
-import { Public } from 'src/common/docorators/public.decorator';
+import { Public } from '../common/docorators/public.decorator';
 import JwtRefreshGuard from './jwt-authRefresh.guard copy';
 
 @Public()

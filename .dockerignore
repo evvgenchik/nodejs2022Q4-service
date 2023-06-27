@@ -1,8 +1,10 @@
-# compiled output
-/dist
-/node_modules
-
-env
+node_modules
+dist
+Dockerfile
+db
+.git
+README.md
+.dockerignore
 
 # Logs
 logs

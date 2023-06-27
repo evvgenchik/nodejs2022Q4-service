@@ -1,8 +1,38 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { SwaggerModule } from '@nestjs/swagger';
+import { readFile } from 'node:fs/promises';
+import * as path from 'path';
+import { HttpExceptionFilter } from './common/exceptionFilter/exceptionFilter';
+import { MyLogger } from './logger/my-logger.service';
+import * as cookieParser from 'cookie-parser';
+
+const addUncaughtHandlers = (logger: MyLogger) => {
+  process.on('unhandledRejection', (err) =>
+    logger.error(`unhandledRejection ${err}`),
+  );
+  process.on('uncaughtException', (err) =>
+    logger.error(`uncaughtException ${err}`),
+  );
+};
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(4000);
+  const PORT = process.env.PORT || 4001;
+  const app = await NestFactory.create(AppModule, {
+    logger: false,
+  });
+  app.use(cookieParser());
+
+  const pathToFile = path.join(__dirname, '../doc/doc.json');
+  const document = JSON.parse(await readFile(pathToFile, { encoding: 'utf8' }));
+  SwaggerModule.setup('doc', app, document);
+
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  await app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+  const logger = app.get<MyLogger>(MyLogger);
+  addUncaughtHandlers(logger);
 }
+
 bootstrap();
